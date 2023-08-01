@@ -22,7 +22,7 @@ class Channel:
         self.channel_id = channel_id
         self.title = channel["items"][0]["snippet"]["title"]
         self.description = channel["items"][0]["snippet"]["description"]
-        self.customUrl = channel["items"][0]["snippet"]["customUrl"]
+        self.customUrl = f"https://www.youtube.com/channel/{self.channel_id}"
         self.viewCount = channel["items"][0]["statistics"]["viewCount"]
         self.subscriberCount = channel["items"][0]["statistics"]["subscriberCount"]
         self.videoCount = channel["items"][0]["statistics"]["videoCount"]
@@ -43,8 +43,19 @@ class Channel:
         youtube = build('youtube', 'v3', developerKey=Channel.api_key)
         return youtube
 
-    def to_json(self, file_path, channel):
-        pass
+    def to_json(self, f):
+        task1 = {
+            'id': self.channel_id,
+            'title': self.title,
+            'description': self.description,
+            'view_count': self.viewCount,
+            'subscriber_count': self.subscriberCount,
+            'video_count': self.videoCount,
+            'url': self.customUrl
+            }
+        with open(f, 'w', encoding='utf-8') as file:
+            json.dump(task1, file, indent=2, ensure_ascii=False)
+
 
 
 
