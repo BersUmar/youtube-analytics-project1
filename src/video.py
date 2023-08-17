@@ -9,13 +9,21 @@ class Video:
 
     def __init__(self, video_id: str) -> None:
         """Видео инициализируется id и далее через API"""
-        self.__video_id = video_id
-        self._init_from_api = self.get_service()
-        self.title = self._init_from_api['items'][0]['snippet']['title']
-        self.url = self._init_from_api['items'][0]['id']
-        self.view_count = self._init_from_api['items'][0]['statistics']['viewCount']
-        self.like_count = self._init_from_api['items'][0]['statistics']['likeCount']
-
+        try:
+            self.__video_id = video_id
+            self._init_from_api = self.get_service()
+            self.title = self._init_from_api['items'][0]['snippet']['title']
+            self.url = self._init_from_api['items'][0]['id']
+            self.view_count = self._init_from_api['items'][0]['statistics']['viewCount']
+            self.like_count = self._init_from_api['items'][0]['statistics']['likeCount']
+            if not self._init_from_api:
+                raise IndexError(self._init_from_api)
+        except IndexError as er:
+            print(f'Ошибка инициализации экземпляра класса Video: {er}')
+            self.title = None
+            self.url = None
+            self.view_count = None
+            self.like_count = None
 
     def get_service(self):
         # создать специальный объект для работы с API
